@@ -1,4 +1,5 @@
 login_autogen/timestamp: \
+	/home/devpsiarch/programming/shelfwise/include/Auth.h \
 	/home/devpsiarch/programming/shelfwise/login/CMakeLists.txt \
 	/home/devpsiarch/programming/shelfwise/login/build/Desktop-Debug/.qtc/package-manager/auto-setup.cmake \
 	/home/devpsiarch/programming/shelfwise/login/build/Desktop-Debug/CMakeFiles/3.31.3/CMakeCXXCompiler.cmake \
@@ -7,6 +8,7 @@ login_autogen/timestamp: \
 	/home/devpsiarch/programming/shelfwise/login/login.cpp \
 	/home/devpsiarch/programming/shelfwise/login/login.h \
 	/home/devpsiarch/programming/shelfwise/login/main.cpp \
+	/home/devpsiarch/programming/shelfwise/src/Auth.cpp \
 	/usr/include/QtCore/Qt \
 	/usr/include/QtCore/q20functional.h \
 	/usr/include/QtCore/q20iterator.h \
@@ -686,6 +688,7 @@ login_autogen/timestamp: \
 	/usr/share/cmake-3.31/Modules/Compiler/GNU.cmake \
 	/usr/share/cmake-3.31/Modules/FeatureSummary.cmake \
 	/usr/share/cmake-3.31/Modules/FindOpenGL.cmake \
+	/usr/share/cmake-3.31/Modules/FindOpenSSL.cmake \
 	/usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake \
 	/usr/share/cmake-3.31/Modules/FindPackageMessage.cmake \
 	/usr/share/cmake-3.31/Modules/FindPkgConfig.cmake \

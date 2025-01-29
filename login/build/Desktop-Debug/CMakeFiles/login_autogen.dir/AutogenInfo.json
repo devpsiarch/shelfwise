@@ -396,6 +396,12 @@
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsMacros.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsPlugins.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsVersionlessAliasTargets.cmake",
+		"/usr/share/cmake-3.31/Modules/FindOpenSSL.cmake",
+		"/usr/share/cmake-3.31/Modules/FindPkgConfig.cmake",
+		"/usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake",
+		"/usr/share/cmake-3.31/Modules/FindPackageMessage.cmake",
+		"/usr/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake",
+		"/usr/share/cmake-3.31/Modules/FindPackageMessage.cmake",
 		"/usr/share/cmake-3.31/Modules/GNUInstallDirs.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "/home/devpsiarch/programming/shelfwise/login",
@@ -404,6 +410,12 @@
 	"DEP_FILE_RULE_NAME" : "login_autogen/timestamp",
 	"HEADERS" : 
 	[
+		[
+			"/home/devpsiarch/programming/shelfwise/include/Auth.h",
+			"MU",
+			"GAOSTOI7XA/moc_Auth.cpp",
+			null
+		],
 		[
 			"/home/devpsiarch/programming/shelfwise/login/login.h",
 			"MU",
@@ -470,7 +482,8 @@
 	"SOURCES" : 
 	[
 		[ "/home/devpsiarch/programming/shelfwise/login/login.cpp", "MU", null ],
-		[ "/home/devpsiarch/programming/shelfwise/login/main.cpp", "MU", null ]
+		[ "/home/devpsiarch/programming/shelfwise/login/main.cpp", "MU", null ],
+		[ "/home/devpsiarch/programming/shelfwise/src/Auth.cpp", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],
