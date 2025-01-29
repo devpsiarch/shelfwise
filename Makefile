@@ -6,3 +6,7 @@ run:main
 	./main
 clean:
 	rm main
+
+
+login-gui:
+	./login/build/Desktop-Debug/login
