@@ -1,7 +1,7 @@
 #include "../include/Auth.h"
 using namespace std;
 // only school students can use the application
-bool Auth::ValidEmail(const string mail){
+bool Auth::ValidEmail(const string &mail){
     unsigned int i = 0;
     while(i < mail.length()){
         if(mail[i] == '@') break;
@@ -28,8 +28,4 @@ string Auth::ShaPwd(const string &pwd){
         hex_hash += buf;
     }
     return hex_hash; 
-}
-
-void Auth::Fetchdb(const string mail,const string pwd){
-
 }
