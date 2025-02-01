@@ -1,6 +1,6 @@
 #pragma once
 #include <openssl/sha.h>
-#include <soci/soci.h>
+#include <mariadb/conncpp.hpp>
 #include <exception>
 #include <string>
 

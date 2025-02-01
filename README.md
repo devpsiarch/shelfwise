@@ -11,7 +11,8 @@ I use the $maridb$ database instead of $mysql$ , i know how availble that would 
 # Dependencies 
 * A c++ compiler , i use g++ in the build process.
 * Qt , on UNIX you can install it using your package manager (windows support soon).
-* A database (only if you are hosting the program).
+* maridb (only if you are hosting the program).
+* maridb cpp connector.
 
 # Disclamer 
 This program is not yet ready and i will very much love to her your input , any bugs or memory leaks please do point them out!

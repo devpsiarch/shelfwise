@@ -21,7 +21,7 @@ GRANT ALL PRIVILEGES ON login_shelfwise.* TO role_login_dev;
 SHOW GRANTS FOR role_login_dev;
 
 -- Create a user that will login from the c++ using an sql API
-CREATE USER IF NOT EXISTS shelfwisedev1@localhost IDENTIFIED BY 'PICK_PASSWORD_HERE';
+CREATE USER IF NOT EXISTS shelfwisedev1@localhost IDENTIFIED BY 'PICK-PASSWORD-HERE';
 GRANT role_login_dev TO shelfwisedev1@localhost;
 
 -- confirmation
