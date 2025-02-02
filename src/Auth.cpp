@@ -1,13 +1,13 @@
 #include "../include/Auth.h"
 using namespace std;
-// only school students can use the application
+ 
 bool Auth::ValidEmail(const string &mail){
     unsigned int i = 0;
     while(i < mail.length()){
         if(mail[i] == '@') break;
         i++;
     }
-    if(mail.substr(i,mail.length()-i) == "@ensia.edu.dz"){
+    if(mail.substr(i,mail.length()-i) == MailFormat){
         return true;
     }
     return false;
@@ -28,4 +28,65 @@ string Auth::ShaPwd(const string &pwd){
         hex_hash += buf;
     }
     return hex_hash; 
+}
+// request a select all from the users database
+void Auth::DisplayUsers(Statement* stmnt){
+    try {
+        ResultSet *res = stmnt->executeQuery(ShowUsersFormat);
+        cout << "-------------------\n";
+        // Example of the table from the database
+        // --> petition to make it even more abstract
+        while(res->next()){
+            cout << "ID: " << res->getInt("id") << '\n'
+                << "mail: " << res->getString("school_email") << '\n'
+                << "password_hashed: " << res->getString("password_hashed") << '\n'
+                << "-------------------\n";
+        }
+        delete res;
+    }
+    catch(const exception& e) {
+        cerr << "Error while Displaying Users: " << e.what() << endl;
+    }
+}
+// The function exepect the mail and password that you passed are correct anc checked
+// for example the school mail
+void Auth::InsertUser(const string &mail,const string &password_hashed,PreparedStatement* prep){
+    try {
+        prep->setString(1,mail);
+        prep->setString(2,password_hashed);
+        prep->executeUpdate();
+    }
+    catch(const exception& e){
+        cout << "Error while adding a User to the database: " << e.what() << "\n";
+    }
+}
+
+void Auth::DeleteUser(const string &mail,PreparedStatement* prep){
+    try {
+        prep->setString(1,mail);
+        prep->executeUpdate();
+    }
+    catch(const exception& e){
+        cout << "Error while deleting user from that database: " << e.what() << '\n';
+    }
+}
+
+
+bool Auth::FetchUser(const string &mail,PreparedStatement* prep){
+    try {
+        prep->setString(1,mail);
+        unique_ptr<ResultSet> res(prep->executeQuery()); 
+        // now we check the result of the query sent
+        if(res->next()){
+            if(res->getInt(1) > 0){
+                return true;
+            }
+            else return false;
+        }
+
+    }
+    catch(const exception& e){
+        cout << "Error while fetching user mail: " << e.what() << '\n';
+        return false;
+    }
 }

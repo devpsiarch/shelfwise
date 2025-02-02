@@ -6,10 +6,9 @@ USE login_shelfwise;
 -- This creates the users table in the database 
 -- i dont know if adding a new attribute will break this or not but hey
 CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT, 
     school_email VARCHAR(255) NOT NULL UNIQUE,
-    password_hashed VARCHAR(255),
-    PRIMARY KEY(id)
+    password_hashed VARCHAR(255)
 );
 
 DESC users;
@@ -21,7 +20,7 @@ GRANT ALL PRIVILEGES ON login_shelfwise.* TO role_login_dev;
 SHOW GRANTS FOR role_login_dev;
 
 -- Create a user that will login from the c++ using an sql API
-CREATE USER IF NOT EXISTS shelfwisedev1@localhost IDENTIFIED BY 'PICK-PASSWORD-HERE';
+CREATE USER IF NOT EXISTS shelfwisedev1@localhost IDENTIFIED BY 'PASSWORD_HERE';
 GRANT role_login_dev TO shelfwisedev1@localhost;
 
 -- confirmation
