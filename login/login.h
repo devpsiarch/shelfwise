@@ -31,8 +31,7 @@ class login;
 }
 QT_END_NAMESPACE
 
-class login : public QMainWindow
-{
+class login : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -45,4 +44,5 @@ private slots:
 private:
     Ui::login *ui;
 };
+
 #endif // LOGIN_H

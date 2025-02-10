@@ -2,46 +2,48 @@
 #include <iostream>
 using namespace std;
 
-static const size_t Max_book_title = 100;   
-static const size_t Max_book_author = 20;
-static const size_t Max_book_subject = 15;
-Book::Book(string title,string sub,string author,uint8_t stock){
-    Title = title;
-    Subject = sub;
-    Author = author;
-    In_stock = stock;
+
+Book::Book(const string& t, const string& a, const string& i, const string& lang,
+     int y, const string& g, const string& p, int pg, const string& f, int s)
+     : title(t), author(a), isbn(i), language(lang), year(y),
+       genre(g), publisher(p), pages(pg), format(f), stock(s)
+{
+    // We will go over some conditions that assert that the data that we provided 
+    // are compatible with the datatypes that the db hosts
+    if(title.length() > 255) {
+        throw invalid_argument("Cant have that long of a title.\n");
+    }
+    if(author.length() > 255) {
+        throw invalid_argument("Cant have that long of an author.\n");
+    }
+    // isbn have to be exacly 17 chars long
+    if(isbn.length() != 17) {
+        throw invalid_argument("Cant have that long of an author.\n");
+    }
+    // langs have to be exacly 2 chars long as well
+    if(language.length() != 2) {
+        throw invalid_argument("Cant have that long of an author.\n");
+    }
+    if(genre.length() > 100){
+        throw invalid_argument("Cant have that big of genre.\n");
+    }
+    if(publisher.length() > 100){
+        throw invalid_argument("Cant have that big of publisher name.\n");
+    }
+    // thus
+    if(format.length() > 20){
+        throw invalid_argument("Cant have that big of publisher name.\n");
+    }
+    if (year <= 0) {
+        throw invalid_argument("Year must be a positive number.`\n");
+    }
+    if (pages <= 0) {
+        throw invalid_argument("Pages must be greater than zero.\n");
+    }
+    if(stock < 0){
+        throw invalid_argument("You cant have negtives in stock.\n");
+    }
 }
+
 Book::~Book(){
-    Title.clear();
-}
-void Book::DisplayBookInfo() const{
-    cout << "Book: " << Title << '\n';
-    cout << "we have: " << (int)In_stock << '\n';
-}
-// This will allow The user to eddit a book 
-// when this returns true that means the edditing happended 
-// else that means that the edditing did not happen ... suck on this API
-
-bool Book::edditTitle(string title){
-    if(title.length() > Max_book_title) return false;
-    Title = title;
-    return true;
-}
-bool Book::edditSubject(string sub){
-    if(sub.length() > Max_book_subject) return false;
-    Subject = sub;
-    return true;
-}
-bool Book::edditAuthor(string author){
-    if(author.length() > Max_book_author) return false;
-    Author = author;
-    return true;
-}
-void Book::edditStock(uint8_t stock){
-    In_stock = stock;
-}
-
-bool Book::Equale(Book *book) const {
-    if(Title == book->Title && In_stock == book->In_stock) return true;
-    else return false;
 }

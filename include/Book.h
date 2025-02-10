@@ -1,32 +1,28 @@
-// assures the inclusion of this file once
 #pragma once
 #include <iostream>
 #include <string>
-#include <cstdint>
+#include <stdexcept>
 using namespace std;
-// Am defining some consts here to regulate and limit the freedome of Book object
-
+// The point of this classes existance is to make the some intermidatiate process much neeter and easier to
+// handle before being eventuay send and stored in the database , for example these objects are used to store 
+// new books that we have the intnetion to add to perminantly or the books info read from a different source
+// and now are waiting to be handled.
 class Book {
+// each of these data attributes have some conditions that they have to meet to be accepted as 
+// a BOOK intermidiate object , to ensure they correspond to the database types. 
 private:
-    // Image Cover;
-    // String Author;?
+    string title;
+    string author;
+    string isbn;
+    string language;
+    int year;
+    string genre;
+    string publisher;
+    int pages;
+    string format;
+    int stock;
 public:
-    string Title;
-    string Subject;
-    string Author;
-    uint8_t In_stock;
-    Book(string title,string sub,string author,uint8_t stock);
+    Book(const string& t, const string& a, const string& i, const string& lang,
+         int y, const string& g, const string& p, int pg, const string& f, int s);
     ~Book();
-    
-    bool edditTitle(string title);
-    bool edditSubject(string sub);
-    bool edditAuthor(string author);
-    // This methode will be exclusivly for the book manager admin 
-    // and will expect the user to be accurate in changing the number of books 
-    // in stock , the program has no way to detect if the number is correct or not ,
-    // this is your reposnsibility
-    void edditStock(uint8_t stock);
-    
-    void DisplayBookInfo() const;
-    bool Equale(Book *book) const;
 };

@@ -1,6 +1,6 @@
 SRC := $(wildcard src/*.cpp) 
 # We use he ssl libary to compute the sha256 of user passwords to fetch them on db
-FLAGS := -o2 -Wall -Wextra -lssl -lcrypto -lmariadbcpp
+FLAGS := -o2 -Wall -Wextra -lssl -lcrypto -lmariadbcpp -g
 
 
 main:$(SRC)
@@ -11,5 +11,5 @@ clean:
 	rm main
 
 
-login-gui:
+front:
 	./login/build/Desktop-Debug/login

@@ -3,7 +3,7 @@
 #include <string>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "../include/Auth.h"
+#include "../Auth/Auth.h"
 
 using namespace std;
 
@@ -67,6 +67,5 @@ void login::on_pushButton_clicked()
     }
     // hash password
     string hashed = Auth::ShaPwd(password);
-    // check for (email,pwd.hash()) in database
-    // else no ? show_failed in UI
+    // send a request to the server
 }

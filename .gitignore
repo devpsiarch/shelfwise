@@ -1,2 +1,6 @@
 /login/build/
-/init_login_db.sql
+/userpage/build/
+/db.sql
+/conf.shelf
+/main
+/design
