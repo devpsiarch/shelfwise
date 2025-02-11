@@ -1,14 +1,14 @@
 #pragma once
-#include "Book.h"
+#include "book.h"
 #include <unordered_map>
 #include <iostream>
 #include <limits>
 #include <string>
 #include <iomanip>
-#include "db.h"
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include <mariadb/conncpp.hpp>
 using namespace std;
 using namespace sql;
 // the shelf is basicly a database on its own , it has a connection to a mariadb db and makes quries using the 
@@ -17,10 +17,11 @@ using namespace sql;
 
 
 // Here i will define some const string that define the interataction between the database and the server 
-const string FetchBookFormat = "SELECT COUNT(*) FROM shelfwise.books WHERE isbn=?";
+const string FetchBookByIsbnFormat = "SELECT COUNT(*) FROM shelfwise_db.books WHERE isbn=?";
 const string ShowBooksFormat = "SELECT * FROM shelfwise_db.books;";
+const string DeleteBookByisbnFormat = "DELETE FROM shelfwise_db.books WHERE isbn=?";
 const string AddBookFormat = 
-"INSERT INTO books (title, author, isbn, language,"
+"INSERT INTO shelfwise_db.books (title, author, isbn, language,"
     "publication_year, genre, publisher, page_count,"
     "format, stock) "
     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -29,7 +30,6 @@ class shelf {
 private:
     Properties creds;
     unique_ptr<Connection> connect;
-    vector<string> rows; // always include the id rows and whatever you want (as long as they are strings)
 public:
     // The point from making the object shelf , is that anyone can create a Bundle (Group) of book 
     // depending on a specific relation based on the attributes that the book has .
@@ -43,11 +43,13 @@ public:
     // Shows some info about the shelf being used aka the (db)
     void showShelf() const;
     // This gets you the vector do init a shelf instance
-    static vector<string>* readCreds(string filename);
+    static vector<string>* readCreds(const string filename);
     // checks if a book already exists in the database given its isbn which is unique to each book 
-    bool fetchBook(string &isbn_);
+    bool fetchBook(const string &isbn_);
     // duh , adds a book to the db
-    void addBook();
-    bool rmoBook();
-    bool updateBook();
+    bool addBook(book *wanted);
+    bool rmoBook(book *wanted);
+    // we will have later the option to edit the books if a mistake were to arrise 
+    // it needs us to impliment a bunch of methodes that are repeatative to change each attribute 
+    // if the db.
 };

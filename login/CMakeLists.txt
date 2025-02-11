@@ -18,8 +18,6 @@ set(PROJECT_SOURCES
         login.cpp
         login.h
         login.ui
-	../Auth/Auth.h
-	../Auth/Auth.cpp
 )
 
 

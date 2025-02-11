@@ -3,7 +3,6 @@
 #include <string>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "../Auth/Auth.h"
 
 using namespace std;
 
@@ -51,21 +50,6 @@ void ClickableLabel::mousePressEvent(QMouseEvent* event) {
 
 void login::on_pushButton_clicked()
 {
-    // use methodes here
-    string email = ui->email_in->text().toStdString();
-    string password = ui->password_in->text().toStdString();
-    // validate both are not null
-    if(email == "" && password == ""){
-        // no inputs where given so we make them red to warn the user
-        ui->email_in->setStyleSheet("QLineEdit { border: 2px solid #FF0000; }");
-        ui->password_in->setStyleSheet("QLineEdit { border: 2px solid #FF0000; }");
-    }
-    // validate email for format : x.@ensia.edu.dz
-    if(!Auth::ValidEmail(email)){
-        // make the input red
-        ui->email_in->setStyleSheet("QLineEdit { border: 2px solid #FF0000; }");
-    }
-    // hash password
-    string hashed = Auth::ShaPwd(password);
-    // send a request to the server
+    // makes a http request using a seprate code base.
+    // and handle the response using another code base.
 }

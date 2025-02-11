@@ -24,13 +24,13 @@ void shelf::showShelf() const {
     try {
         Statement *stmnt = connect->createStatement();
         ResultSet *res = stmnt->executeQuery(ShowBooksFormat);
-        cout << "-------------------\n";
+        cout << "-------------------Shelf showing-------------------\n";
         while(res->next()){
             cout << "ID: " << res->getInt("id") << '\n'
                 << "title: " << res->getString("title") << '\n'
                 << "author: " << res->getString("author") << '\n'
                 << "isbn: " << res->getString("isbn") << '\n'
-                << "lang: " << res->getString("lanaguage") << '\n'               
+                << "lang: " << res->getString("language") << '\n'               
                 
                 << "pub_year: " << res->getString("publication_year") << '\n'
                 << "genre: " << res->getString("genre") << '\n'
@@ -40,6 +40,7 @@ void shelf::showShelf() const {
                 << "stock: " << res->getInt("stock") << '\n'               
                 << "-------------------\n";
         }
+        cout << "-------------------Shelf showing-------------------\n";
         delete res;
         delete stmnt;
     }
@@ -48,7 +49,7 @@ void shelf::showShelf() const {
     }
 }
 
-vector<string>* shelf::readCreds(string filename){
+vector<string>* shelf::readCreds(const string filename){
     ifstream file(filename);
     if(!file.is_open()){
         // This will be checked by the caller
@@ -73,9 +74,9 @@ vector<string>* shelf::readCreds(string filename){
     return data;
 }
 
-bool shelf::fetchBook(string &isbn_){
+bool shelf::fetchBook(const string &isbn_){
     try {
-        PreparedStatement* prep = connect->prepareStatement(FetchBookFormat);
+        PreparedStatement* prep = connect->prepareStatement(FetchBookByIsbnFormat);
         prep->setString(1,isbn_);
         unique_ptr<ResultSet> res(prep->executeQuery()); 
         // now we check the result of the query sent
@@ -93,19 +94,50 @@ bool shelf::fetchBook(string &isbn_){
         return false;
     }
 }
-void shelf::addBook() {
+bool shelf::addBook(book *wanted) {
    try{
-        //if(fetchBook()) 
-        // then try 
+        if(fetchBook(wanted->getIsbn())){
+            cout << "Cant add this book , already exists in database ! (check your isbn) .\n";
+            return false;
+        }
+        // then try to add it to the db 
+        PreparedStatement *pstmt = connect->prepareStatement(AddBookFormat); 
+        pstmt->setString(1,wanted->getTitle());           // Title
+        pstmt->setString(2,wanted->getAuthor());          // Author
+        pstmt->setString(3,wanted->getIsbn());            // ISBN
+        pstmt->setString(4,wanted->getLanguage());        // Language (ISO 639-1 code)
+        pstmt->setInt(5,wanted->getYear());               // Publication Year
+        pstmt->setString(6,wanted->getGenre());           // Genre
+        pstmt->setString(7,wanted->getPublisher());       // Publisher
+        pstmt->setInt(8,wanted->getPages());              // Page Count
+        pstmt->setString(9,wanted->getFormat());          // Format
+        pstmt->setInt(10,wanted->getStock());             // Stock 
+       
+        pstmt->executeQuery();
+        cout << "Inserted successfully !\n";
+
+        delete pstmt;  
+        return true; 
    }catch(const exception& e){
         cout << "Error while adding a book to books code : " << e.what() << '\n';
+        return false;
    } 
 }
-bool shelf::rmoBook() {
-    return true;
+bool shelf::rmoBook(book *wanted) {
+    try {
+         if(!fetchBook(wanted->getIsbn())){
+            cout << "No book found with said isbn , check your isbn.\n";
+            return false;
+        }
+        // then try to add it to the db 
+        PreparedStatement *pstmt = connect->prepareStatement(DeleteBookByisbnFormat);
+        pstmt->setString(1,wanted->getIsbn());           // Title
+        pstmt->executeQuery();
+        cout << "Deleted successfully !\n";
+        delete pstmt; 
+        return true;
+    }catch(const exception& e){
+        cout << "Error removing the book from books code : " << e.what() << '\n';
+        return false;
+    }
 }
-
-bool shelf::updateBook(){
-    return true;
-}
-

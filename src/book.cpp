@@ -1,9 +1,9 @@
-#include "../include/Book.h"
+#include "../include/book.h"
 #include <iostream>
 using namespace std;
 
 
-Book::Book(const string& t, const string& a, const string& i, const string& lang,
+book::book(const string& t, const string& a, const string& i, const string& lang,
      int y, const string& g, const string& p, int pg, const string& f, int s)
      : title(t), author(a), isbn(i), language(lang), year(y),
        genre(g), publisher(p), pages(pg), format(f), stock(s)
@@ -30,7 +30,6 @@ Book::Book(const string& t, const string& a, const string& i, const string& lang
     if(publisher.length() > 100){
         throw invalid_argument("Cant have that big of publisher name.\n");
     }
-    // thus
     if(format.length() > 20){
         throw invalid_argument("Cant have that big of publisher name.\n");
     }
@@ -44,6 +43,54 @@ Book::Book(const string& t, const string& a, const string& i, const string& lang
         throw invalid_argument("You cant have negtives in stock.\n");
     }
 }
+void book::print() const {
+    cout << "Title: " << title << "\n"
+         << "Author: " << author << "\n"
+         << "ISBN: " << isbn << "\n"
+         << "Language: " << language << "\n"
+         << "Year: " << year << "\n"
+         << "Genre: " << genre << "\n"
+         << "Publisher: " << publisher << "\n"
+         << "Pages: " << pages << "\n"
+         << "Format: " << format << "\n"
+         << "Stock: " << stock << "\n";
+}
+const string& book::getTitle() const{
+    return title;
+}
+const string& book::getAuthor() const{
+    return author;
+}
+const string& book::getIsbn() const{
+    return isbn;
+}
+const string& book::getLanguage() const {
+    return language;
+}
 
-Book::~Book(){
+const string& book::getGenre() const {
+    return genre;
+}
+
+const string& book::getPublisher() const {
+    return publisher;
+}
+
+const string& book::getFormat() const {
+    return format;
+}
+
+// Integer-based getters (return int)
+int book::getYear() const {
+    return year;
+}
+
+int book::getPages() const {
+    return pages;
+}
+
+int book::getStock() const {
+    return stock;
+}
+book::~book(){
 }
