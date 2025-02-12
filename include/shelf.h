@@ -1,5 +1,6 @@
 #pragma once
-#include "book.h"
+#include "./book.h"
+#include "./db_conn.h"
 #include <unordered_map>
 #include <iostream>
 #include <limits>
@@ -8,7 +9,6 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
-#include <mariadb/conncpp.hpp>
 using namespace std;
 using namespace sql;
 // the shelf is basicly a database on its own , it has a connection to a mariadb db and makes quries using the 
@@ -28,22 +28,16 @@ const string AddBookFormat =
 
 class shelf {
 private:
-    Properties creds;
-    unique_ptr<Connection> connect;
+    db_conn *handler;
 public:
-    // The point from making the object shelf , is that anyone can create a Bundle (Group) of book 
-    // depending on a specific relation based on the attributes that the book has .
-    // This allows for much more freedom in searching and filtering books
-    // The contructor has the jobs : 
-    // -> reads a file for creds (unique format dont mess it up).
-    // -> gets the properties 
-    // -> make the connection to the database
-    shelf(vector<string> &data);
+    // Instead for each class object to make a connection to the database which is annoying
+    // each class obj makes has a pointer to one that can be shared by manner db handler objects since
+    // we (i mean I) cant make a custom one that handlers all safely.
+    shelf(db_conn *inter);
+    // The destructor makes the handler pointers points to nullptr instead of closing ... check thi API bro !
     ~shelf();
     // Shows some info about the shelf being used aka the (db)
     void showShelf() const;
-    // This gets you the vector do init a shelf instance
-    static vector<string>* readCreds(const string filename);
     // checks if a book already exists in the database given its isbn which is unique to each book 
     bool fetchBook(const string &isbn_);
     // duh , adds a book to the db

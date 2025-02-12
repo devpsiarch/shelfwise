@@ -7,22 +7,16 @@ using namespace sql;
 // this expects the file to be in the parent direcotory to this one
 
 // returns a pointer to a shelf instance or nullptr if failed
-shelf::shelf(vector<string> &data) {
-    Driver* driver = mariadb::get_driver_instance();
-    // filling the shelfs data
-    creds["hostName"]= data[0];
-    creds["userName"]= data[1];
-    creds["password"]= data[2];
-
-    connect = unique_ptr<Connection>(driver->connect(creds));
+shelf::shelf(db_conn *inter) {
+    handler = inter;
 }
 shelf::~shelf(){
-    connect->close();
+    handler = nullptr;
 }
 
 void shelf::showShelf() const {
     try {
-        Statement *stmnt = connect->createStatement();
+        Statement *stmnt = handler->connect->createStatement();
         ResultSet *res = stmnt->executeQuery(ShowBooksFormat);
         cout << "-------------------Shelf showing-------------------\n";
         while(res->next()){
@@ -49,34 +43,9 @@ void shelf::showShelf() const {
     }
 }
 
-vector<string>* shelf::readCreds(const string filename){
-    ifstream file(filename);
-    if(!file.is_open()){
-        // This will be checked by the caller
-        return nullptr;
-    }
-    string buffer;
-    int pres = 0; 
-    vector<string> *data = new vector<string>();
-    while(getline(file,buffer)){
-        // Check for absurd data sizes 
-        if(buffer.length() >= 100){
-            delete data;
-            return nullptr;
-        }
-        data->push_back(buffer);
-        pres ++;
-    }
-    if(pres > 3 || pres < 3){
-        delete data;
-        return nullptr;
-    }
-    return data;
-}
-
 bool shelf::fetchBook(const string &isbn_){
     try {
-        PreparedStatement* prep = connect->prepareStatement(FetchBookByIsbnFormat);
+        PreparedStatement* prep = handler->connect->prepareStatement(FetchBookByIsbnFormat);
         prep->setString(1,isbn_);
         unique_ptr<ResultSet> res(prep->executeQuery()); 
         // now we check the result of the query sent
@@ -101,7 +70,7 @@ bool shelf::addBook(book *wanted) {
             return false;
         }
         // then try to add it to the db 
-        PreparedStatement *pstmt = connect->prepareStatement(AddBookFormat); 
+        PreparedStatement *pstmt = handler->connect->prepareStatement(AddBookFormat); 
         pstmt->setString(1,wanted->getTitle());           // Title
         pstmt->setString(2,wanted->getAuthor());          // Author
         pstmt->setString(3,wanted->getIsbn());            // ISBN
@@ -130,7 +99,7 @@ bool shelf::rmoBook(book *wanted) {
             return false;
         }
         // then try to add it to the db 
-        PreparedStatement *pstmt = connect->prepareStatement(DeleteBookByisbnFormat);
+        PreparedStatement *pstmt = handler->connect->prepareStatement(DeleteBookByisbnFormat);
         pstmt->setString(1,wanted->getIsbn());           // Title
         pstmt->executeQuery();
         cout << "Deleted successfully !\n";
