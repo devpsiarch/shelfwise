@@ -16,8 +16,10 @@ int main(void) {
         };
         // creates a connector to handle queries to any database given a definition for.
         db_conn *main_db = new db_conn(*creds);
-        // creating a obj that interracts with books db using main db handler above.
+        // creating a obj that interracts with books/users db using main db handler above.
         shelf *books_db = new shelf(main_db);
+        auth *users_db = new auth(main_db);
+        
         book *test = new book(
             "the bay at hand",
             "james miller",
@@ -31,14 +33,16 @@ int main(void) {
             10
         );
 
-        test->print();
-        books_db->addBook(test);
-        books_db->rmoBook(test);
+        //test->print();
+        //books_db->addBook(test);
+        //books_db->rmoBook(test);
         books_db->showShelf();  
+        users_db->showUsers();
 
         delete test;
         delete creds;
         delete books_db;
+        delete users_db;
         delete main_db;
     }catch(const exception& e){
         cout << "exception accured on main server ,code : " << e.what() << "\n";
