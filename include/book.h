@@ -11,6 +11,9 @@ class book {
 // each of these data attributes have some conditions that they have to meet to be accepted as 
 // a BOOK intermidiate object , to ensure they correspond to the database types. 
 private:
+    // I will not make it possible to edit every attribute for the book
+    // but only some (it is useless since you can delete and create another one)
+    // for now this will be the standered and may change later or if some amazing contubution came in.
     string title;
     string author;
     string isbn;
@@ -19,8 +22,9 @@ private:
     string genre;
     string publisher;
     int pages;
-    string format;
-    int stock;
+    
+    string format;      // changable
+    int stock;          // changable 
 public:
     book(const string& t, const string& a, const string& i, const string& lang,
          int y, const string& g, const string& p, int pg, const string& f, int s);

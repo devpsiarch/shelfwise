@@ -20,26 +20,18 @@ int main(void) {
         shelf *books_db = new shelf(main_db);
         auth *users_db = new auth(main_db);
         
-        book *test = new book(
-            "the bay at hand",
-            "james miller",
-            "12345678910111213",
-            "EN",
-            1990,
-            "fiction",
-            "yaho",
-            600,
-            "ebook",
-            10
-        );
+
 
         //test->print();
         //books_db->addBook(test);
         //books_db->rmoBook(test);
         books_db->showShelf();  
         users_db->showUsers();
-
-        delete test;
+    
+        if(books_db->fetchBook("title","the bay at hand")){
+            cout << "Am so bad at programming\n";
+        }
+        
         delete creds;
         delete books_db;
         delete users_db;

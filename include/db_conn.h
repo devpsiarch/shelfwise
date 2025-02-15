@@ -24,4 +24,6 @@ public:
     ~db_conn();
     // This methode will get us the vector of data that will be needed to init the obj.
     static vector<string>* readCreds(const string filename);
+    // checks if the string value caontains vulnrubilitites
+    void sanitize(const string &val);
 };

@@ -2,7 +2,7 @@
 using namespace std;
 using namespace sql;
 
-db_conn::db_conn(vector<string> &data) {
+db_conn::db_conn(vector<string> &data){
     Driver* driver = mariadb::get_driver_instance();
     // filling the shelfs data
     creds["hostName"]= data[0];
@@ -37,4 +37,12 @@ vector<string>* db_conn::readCreds(const string filename){
         return nullptr;
     }
     return data;
+}
+
+void db_conn::sanitize(const string &val){
+    if (val.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ ")
+        != std::string::npos) {
+    throw std::invalid_argument("Invalid database name, came from sanitize\n");
+    
+    }
 }

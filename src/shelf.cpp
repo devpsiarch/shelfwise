@@ -43,10 +43,22 @@ void shelf::showShelf() const {
     }
 }
 
-bool shelf::fetchBook(const string &isbn_){
+bool shelf::fetchBook(const string &by_what,const string &index) const {
     try {
-        PreparedStatement* prep = handler->connect->prepareStatement(FetchBookByIsbnFormat);
-        prep->setString(1,isbn_);
+        handler->sanitize(by_what);
+        handler->sanitize(index);
+
+        PreparedStatement* prep;
+        if (by_what == "isbn") {
+            prep = handler->connect->prepareStatement(FetchBookByIsbnFormat);
+        } else if (by_what == "author") {
+            prep = handler->connect->prepareStatement(FetchBookByAuthorFormat);
+        } else if (by_what == "publisher") {
+            prep = handler->connect->prepareStatement(FetchBookByPubFormat);
+        } else if (by_what == "title") {
+            prep = handler->connect->prepareStatement(FetchBookByTitleFormat);
+        }
+        prep->setString(1,index);
         unique_ptr<ResultSet> res(prep->executeQuery()); 
         // now we check the result of the query sent
         if(res->next()){
@@ -63,9 +75,9 @@ bool shelf::fetchBook(const string &isbn_){
         return false;
     }
 }
-bool shelf::addBook(book *wanted) {
+bool shelf::addBook(book *wanted) const {
    try{
-        if(fetchBook(wanted->getIsbn())){
+        if(fetchBook("isbn",wanted->getIsbn())){
             cout << "Cant add this book , already exists in database ! (check your isbn) .\n";
             return false;
         }
@@ -92,9 +104,9 @@ bool shelf::addBook(book *wanted) {
         return false;
    } 
 }
-bool shelf::rmoBook(book *wanted) {
+bool shelf::rmoBook(book *wanted) const {
     try {
-         if(!fetchBook(wanted->getIsbn())){
+        if(!fetchBook("isbn",wanted->getIsbn())){
             cout << "No book found with said isbn , check your isbn.\n";
             return false;
         }
@@ -107,6 +119,21 @@ bool shelf::rmoBook(book *wanted) {
         return true;
     }catch(const exception& e){
         cout << "Error removing the book from books code : " << e.what() << '\n';
+        return false;
+    }
+}
+
+bool shelf::editBookStock(const string &isbn_,int new_val){
+    try {
+        handler->sanitize(isbn_); 
+        PreparedStatement *pstmt = handler->connect->prepareStatement(EditBookStock);
+        pstmt->setInt(1,new_val);
+        pstmt->setString(2,isbn_);
+        pstmt->executeQuery();
+        cout << "Edited successfully ... \n";
+        return true;
+    }catch(const exception& e){
+        cout << "Error editing a book by isbn ... \n";
         return false;
     }
 }
