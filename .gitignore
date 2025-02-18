@@ -1,5 +1,5 @@
-/login/build/
-/userpage/build/
+/frontend/login/build/
+/frontend/userpage/build/
 /db.sql
 /conf.shelf
 /main

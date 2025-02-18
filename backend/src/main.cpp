@@ -3,6 +3,7 @@
 #include "../include/shelf.h"
 #include "../include/auth.h"
 #include "../include/db_conn.h"
+#include "../include/server.h"
 #include <mariadb/conncpp.hpp>
 using namespace std;
 using namespace sql;
@@ -20,21 +21,19 @@ int main(void) {
         shelf *books_db = new shelf(main_db);
         auth *users_db = new auth(main_db);
         
+        server *shelfwise = new server(books_db,users_db);
+        shelfwise->createSocket(8080);
+        shelfwise->handleRequests(); 
+        // Here the program has to wait and listen for an incoming requests and handle them 
+        // accordingly and send back responses.
+        // For now since am only trying to figure this out , am gonna take a raw approche
+        // and use C socket to impliment said functionality 
+        // This will kill the cross plateform but it will "hopefully" added later.
 
 
-        //test->print();
-        //books_db->addBook(test);
-        //books_db->rmoBook(test);
-        books_db->showShelf();  
-        users_db->showUsers();
-    
-        if(books_db->fetchBook("title","the bay at hand")){
-            cout << "Am so bad at programming\n";
-        }
         
+        delete shelfwise;
         delete creds;
-        delete books_db;
-        delete users_db;
         delete main_db;
     }catch(const exception& e){
         cout << "exception accured on main server ,code : " << e.what() << "\n";
