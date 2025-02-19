@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 using namespace std;
 class server {
 private:
@@ -33,6 +35,8 @@ private:
     struct sockaddr_in address;
     // this tells us how many user can stack up in queue to be served.
     int connection_log = 10;
+    // i went with a constante buffer that can be overwritten.
+    char buffer[300];
 public:
     server(shelf *books_db,auth *users_db);
     ~server();
@@ -45,4 +49,6 @@ public:
     // This will display additional information about who sends the requests to the log 
     // i thought this will be important to see what the hell is going on    
     void whoRequested();
+    // here iwanted to know more abourt who made the request 
+    void printWho();
 };
