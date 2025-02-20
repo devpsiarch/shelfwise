@@ -12,13 +12,12 @@
 #include <arpa/inet.h>
 #include <iostream>
 
-class socket {
+class Socket {
 public:
     // this is used to check if a socket is already created and if so 
     // overwrites it if we try to create another
-    bool is_created = false;
     // files desciptor for our socket
-    int server_fd;
+    const int server_fd;
     // fd for the reponse socket
     int new_socket;
     // tells us how much bytes (i think) we read.
@@ -31,5 +30,6 @@ public:
     char buffer[300]; 
     // gonna use ol C. 
     // options that are used to create the socket will remained constant and managed by the methode.
-    void createSocket(const int port);
+    Socket(const int port);
+    ~Socket();
 };

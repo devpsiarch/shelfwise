@@ -1,10 +1,11 @@
-#include "../include/socket.h"
+#include "socket.h"
 using namespace std;
 
-void socket::createSocket(int port){
+Socket::Socket(int port) : 
+    server_fd(::socket(AF_INET,SOCK_STREAM,0)){
     // This will create the socket and prep it for listening
     // creating the socket.
-    if((server_fd = ::socket(AF_INET,SOCK_STREAM,0)) < 0){
+    if(server_fd < 0){
         cout << "Error creating socket ... exiting with failure.\n";
         exit(EXIT_FAILURE);
     }
@@ -20,4 +21,8 @@ void socket::createSocket(int port){
         exit(EXIT_FAILURE);
     }
     cout << "Socket created with success.\n";
+}
+
+Socket::~Socket(){
+    close(server_fd);
 }

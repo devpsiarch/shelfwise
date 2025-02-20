@@ -1,4 +1,5 @@
 SRC := $(wildcard backend/src/*.cpp) 
+socket_src := $(wildcard socket/socket.cpp)
 FLAGS := -o2 -Wall -Wextra -lssl -lcrypto -lmariadbcpp -g
 HEADER := $(wildcard backend/include/*.h)
 # moved here to force you to specify what the you wanna build.
@@ -6,7 +7,7 @@ HEADER := $(wildcard backend/include/*.h)
 clean:
 	rm main
 server:$(SRC) $(HEADER)
-	g++ $(FLAGS) $(SRC) -o main
+	g++ $(FLAGS) $(SRC) $(socket_src) -o main
 run:main
 	./main
 login:

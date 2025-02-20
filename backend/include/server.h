@@ -1,6 +1,3 @@
-// note : make an abstract object that handles the network stuff and create "server" and "client" objects 
-// that inherite from the latter (while using the UNIX utils to comunicate over a socket).
-
 #pragma once
 // Am gonna try to keep it simple and easy for me to understand , 
 // here we will define the functionality that is neccecary for our backend to be able to serve clients 
@@ -14,17 +11,20 @@
 // Dont forget to impliment multi threading.
 #include "../include/shelf.h"
 #include "../include/auth.h"
-#include "../include/socket.h"
+#include "../../socket/socket.h"
+
+// petitition to add static var that holds how many clients have beend : served , faulted ..// petitition to add static var that holds how many clients have beend : served , faulted ....
 
 using namespace std;
-class server : public socket{
+class server {
 private:
     // we use the unique here to delete the pointers as soon as the object is dead
     unique_ptr<shelf> books;
     unique_ptr<auth> users;
-// the methodes here may be changed if seen fit for socket class
+    Socket *SOCK;
+    // the methodes here may be changed if seen fit for socket class
 public:
-    server(shelf *books_db,auth *users_db);
+    server(shelf *books_db,auth *users_db,int port);
     ~server();
     // This will listen , accept and handle every requst 
     // multthreading implimented.

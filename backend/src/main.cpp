@@ -21,9 +21,8 @@ int main(void) {
         shelf *books_db = new shelf(main_db);
         auth *users_db = new auth(main_db);
         
-        server *shelfwise = new server(books_db,users_db);
-        shelfwise->createSocket(8080);
-        shelfwise->handleRequests(); 
+        server *shelfwise = new server(books_db,users_db,8080);
+        shelfwise->handleRequests();
         // Here the program has to wait and listen for an incoming requests and handle them 
         // accordingly and send back responses.
         // For now since am only trying to figure this out , am gonna take a raw approche

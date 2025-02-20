@@ -1,13 +1,14 @@
 #include "../include/server.h"
 using namespace std;
 
-server::server(shelf *books_db,auth *users_db){
+server::server(shelf *books_db,auth *users_db,int port){
     books = unique_ptr<shelf>(books_db);
     users = unique_ptr<auth>(users_db);
+    SOCK = new Socket(port);
 }
 server::~server(){
     // closing the socket.
-    close(server_fd);
+    delete SOCK;
 }
 
 void server::printWho(){
@@ -16,11 +17,11 @@ void server::printWho(){
     char ip_buffer[INET6_ADDRSTRLEN]; // holds the ip string
     char hostname_buffer[NI_MAXHOST]; // holds the hostname string
 
-    inet_ntop(AF_INET,&address.sin_addr,ip_buffer,sizeof(ip_buffer));
+    inet_ntop(AF_INET,&SOCK->address.sin_addr,ip_buffer,sizeof(ip_buffer));
     
     printf("IP : %s\n",ip_buffer);
     
-    int rc = getnameinfo((struct sockaddr*)&address, sizeof(address),
+    int rc = getnameinfo((struct sockaddr*)&SOCK->address, sizeof(SOCK->address),
                      hostname_buffer, sizeof(hostname_buffer), NULL, 0, NI_NAMEREQD);
     
     // on success
@@ -32,7 +33,7 @@ void server::printWho(){
 }
 void server::handleRequests(){
     // begin listening for requests 
-    if(listen(server_fd,connection_log) != 0){
+    if(listen(SOCK->server_fd,SOCK->connection_log) != 0){
         cout << "Error listening to a socket ... exiting with failure.\n";
         exit(EXIT_FAILURE);
     }
@@ -40,7 +41,7 @@ void server::handleRequests(){
     while(1){
         cout << "\n+++++++ Waiting for new connection ++++++++\n";
         // Here we accept a request
-        if((new_socket = accept(server_fd,(struct sockaddr *)&address,(socklen_t*)sizeof(address))) < 0){
+        if((SOCK->new_socket = accept(SOCK->server_fd,(struct sockaddr *)&SOCK->address,(socklen_t*)sizeof(SOCK->address))) < 0){
             cout << "Error accepting the request ... ignored.\n";
             printWho();
             cout << "------------------Failed-------------------\n";
@@ -56,12 +57,12 @@ void server::handleRequests(){
     }
     // we only read and hanle when the message sent is valid (child proces broke out of the above loop).
     // Handle / read do stuff.
-    int values_read = read(new_socket,buffer,300);  // Well need this later when cheking errors for 
+    int values_read = read(SOCK->new_socket,SOCK->buffer,300);  // Well need this later when cheking errors for 
     // valid messages sent over the socket.
-    printf("msg gotten : %s\n",buffer);
+    printf("msg gotten : %s\n",SOCK->buffer);
     cout << "------------------Response has been sent-------------------\n";
-    close(new_socket);
-    close(server_fd);
+    close(SOCK->new_socket);
+    close(SOCK->server_fd);
     // child process returns from this function to the main where memory is freed and exits 
     // gracfully.
 }
