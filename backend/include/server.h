@@ -1,3 +1,6 @@
+// note : make an abstract object that handles the network stuff and create "server" and "client" objects 
+// that inherite from the latter (while using the UNIX utils to comunicate over a socket).
+
 #pragma once
 // Am gonna try to keep it simple and easy for me to understand , 
 // here we will define the functionality that is neccecary for our backend to be able to serve clients 
@@ -11,38 +14,18 @@
 // Dont forget to impliment multi threading.
 #include "../include/shelf.h"
 #include "../include/auth.h"
-#include <stdio.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+#include "../include/socket.h"
+
 using namespace std;
-class server {
+class server : public socket{
 private:
     // we use the unique here to delete the pointers as soon as the object is dead
     unique_ptr<shelf> books;
     unique_ptr<auth> users;
-    // files desciptor for our socket
-    int server_fd;
-    // fd for the reponse socket
-    int new_socket;
-    // tells us how much bytes (i think) we read.
-    long values_read;
-    // additional info about our socket
-    struct sockaddr_in address;
-    // this tells us how many user can stack up in queue to be served.
-    int connection_log = 10;
-    // i went with a constante buffer that can be overwritten.
-    char buffer[300];
+// the methodes here may be changed if seen fit for socket class
 public:
     server(shelf *books_db,auth *users_db);
     ~server();
-    // gonna use ol C. 
-    // options that are used to create the socket will remained constant and managed by the methode.
-    void createSocket(int port);
     // This will listen , accept and handle every requst 
     // multthreading implimented.
     void handleRequests();
