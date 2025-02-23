@@ -38,11 +38,14 @@ void server::handleRequests(){
         exit(EXIT_FAILURE);
     }
     cout << "Listening for requests ...\n"; 
+    int addrlen = sizeof(SOCK->address); 
     while(1){
         cout << "\n+++++++ Waiting for new connection ++++++++\n";
         // Here we accept a request
-        if((SOCK->new_socket = accept(SOCK->server_fd,(struct sockaddr *)&SOCK->address,(socklen_t*)sizeof(SOCK->address))) < 0){
-            cout << "Error accepting the request ... ignored.\n";
+        SOCK->new_socket = accept(SOCK->server_fd,(struct sockaddr *)&SOCK->address,(socklen_t*)&addrlen);
+        if(SOCK->new_socket < 0){
+            //cout << "Error accepting the request ... ignored.\n";
+            perror("IN accepting\n");
             printWho();
             cout << "------------------Failed-------------------\n";
             continue;
@@ -59,8 +62,12 @@ void server::handleRequests(){
     // Handle / read do stuff.
     int values_read = read(SOCK->new_socket,SOCK->buffer,300);  // Well need this later when cheking errors for 
     // valid messages sent over the socket.
-    printf("msg gotten : %s\n",SOCK->buffer);
+    printf("message recieved : %.*s\n",values_read,SOCK->buffer); 
     cout << "------------------Response has been sent-------------------\n";
+    // not allowed , 
+    // handling will be much more updated later.
+    char* respose = "well recieved";
+    write(SOCK->new_socket,respose,strlen(respose));
     close(SOCK->new_socket);
     close(SOCK->server_fd);
     // child process returns from this function to the main where memory is freed and exits 
