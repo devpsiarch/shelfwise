@@ -2,22 +2,8 @@
 using namespace std;
 
 client::client(int port){
-    SOCK = new Socket(port);
-    SOCK->address.sin_addr.s_addr = 0;
-}
-
-void client::connect(char* ip_address){
-    // converting the ip address to a integer
-    if(inet_pton(AF_INET,ip_address,&SOCK->address.sin_addr) <= 0){
-        cout << "Error while converting the ip address to a integer ...\n";
-        exit(EXIT_FAILURE);
-    }
-    // connecting to socket
-    if(::connect(SOCK->server_fd,(struct sockaddr *)&SOCK->address,sizeof(SOCK->address)) < 0){
-        cout << "Error connecting to the socket ...\n";
-        exit(EXIT_FAILURE);
-    }
-    cout << "Connected to socket with success !\n";
+    SOCK = new Socket();
+    SOCK->connect(port);
 }
 
 void client::sendrequest(char *message,int len){
@@ -27,6 +13,17 @@ void client::sendrequest(char *message,int len){
     }
     cout << "Sent with success!\n";
 }
+
+// I think this should return string ref later to be parsed and handeled.
+void client::readresponse(){
+    SOCK->values_read = read(SOCK->server_fd,SOCK->buffer,Socket::buffer_size);
+    if(SOCK->values_read > Socket::buffer_size){
+        exit(EXIT_FAILURE);
+    }
+    // prints only the nuber of chars read
+    printf("Reponse from server : %.*s\n",SOCK->values_read,SOCK->buffer);
+}
+
 client::~client(){
     delete SOCK;
 }

@@ -14,6 +14,7 @@
 
 class Socket {
 public:
+    static const int buffer_size = 300;
     // this is used to check if a socket is already created and if so 
     // overwrites it if we try to create another
     // files desciptor for our socket
@@ -27,9 +28,15 @@ public:
     // this tells us how many user can stack up in queue to be served.
     int connection_log = 10;
     // i went with a constante buffer that can be overwritten.
-    char buffer[300]; 
+    char buffer[buffer_size]; 
     // gonna use ol C. 
     // options that are used to create the socket will remained constant and managed by the methode.
-    Socket(const int port);
+    Socket();
+    // to allow for more flexibility , we will leave the configuration of the socket to the using class.
+    // this is gonna be used for the server side of the program.
+    void bind(int port);
+    // this is conserning the the client side of the program 
+    // i do leave the complete freedome of messing this up untile i find another way.
+    void connect(int port);
     ~Socket();
 };

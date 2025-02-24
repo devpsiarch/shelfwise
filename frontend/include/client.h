@@ -4,12 +4,12 @@
 #include "../../socket/socket.h"
 #pragma once
 class client  {
+// connection methode provided by socket class
 public:
     Socket* SOCK;
     client(int port);
-    // This will connect to the socket to be able to send messages.
-    void connect(char* ip_address);
     void sendrequest(char *message,int len);
+    void readresponse();
     ~client();
 };
 

@@ -4,7 +4,8 @@ using namespace std;
 server::server(shelf *books_db,auth *users_db,int port){
     books = unique_ptr<shelf>(books_db);
     users = unique_ptr<auth>(users_db);
-    SOCK = new Socket(port);
+    SOCK = new Socket();
+    SOCK->bind(port);
 }
 server::~server(){
     // closing the socket.
@@ -60,7 +61,7 @@ void server::handleRequests(){
     }
     // we only read and hanle when the message sent is valid (child proces broke out of the above loop).
     // Handle / read do stuff.
-    int values_read = read(SOCK->new_socket,SOCK->buffer,300);  // Well need this later when cheking errors for 
+    int values_read = read(SOCK->new_socket,SOCK->buffer,Socket::buffer_size);  // Well need this later when cheking errors for 
     // valid messages sent over the socket.
     printf("message recieved : %.*s\n",values_read,SOCK->buffer); 
     cout << "------------------Response has been sent-------------------\n";
